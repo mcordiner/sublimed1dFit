@@ -1,0 +1,38 @@
+# Optimised parameters
+abund = 0.001
+tkin = 80.
+vexp = 0.70
+vsource = -0.5
+doppler = 0.0
+
+# Fixed parameters
+Q = 7e27
+rNuc = 500.           # m
+betamain = 1.21e-5    # photo-rate at 1AU of main collision partner
+betamol = 1.54e-5    # photo-rate at 1AU of observed species
+rH = 1.07
+delta = 0.115
+rez = 2               # Spectral resolution (channels)
+spec = "HCN"
+eta = 0.9             # Telescope flux loss factor
+hpbwx = 0.454
+hpbwy = 0.308
+pa = -65.5
+xne = 0.2
+lteonly = 0
+useEP = 0
+collPartId = 1
+trans = 3             # zero indexed transition
+chwid = 50.           # m/s
+nchan = 100
+npix = 512
+imgres = 0.1          # pixel size ('')
+units = 0             # 0 for Kelvin, 1 for Jy/pix
+lamFile = "hcn.dat"
+pumpFile = "g_HCN_1au.dat"
+obsSpec = 'HCN.clean1.contsub.259_266_K_kms_rest.txt'
+showplots = True
+
+p0=[abund,tkin,vexp,vsource,doppler]
+pfix=[False,True,False,False,True]
+
