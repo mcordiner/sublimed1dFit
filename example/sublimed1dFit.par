@@ -1,36 +1,35 @@
 # Optimised parameters
-abund = 0.001
-tkin = 80.
-vexp = 0.70
-vsource = -0.5
-dopplerb = 0.0
+abund = 0.001   # Molecular abundance w.r.t. Q
+tkin = 80.      # Kinetic Temperature (K)
+vexp = 0.70     # Expansion velocity (km/s)
+vsource = -0.5  # Doppler shift (km/s)
+dopplerb = 0.0  # Turbulent Doppler Broadening (km/s)
 
 # Fixed parameters
-Q = 7e27
-rNuc = 500.           # m
-betamol = 1.54e-5    # photo-rate at 1AU of observed species
-rH = 1.07
-delta = 0.115
-lp = 0.0                # Production scale length (km)
+Q = 7e27              # Production rate of main collision partner (/s)
+rNuc = 500.           # Nucleus radius (m)
+betamol = 1.54e-5     # photo-rate at 1AU of observed species
+rH = 1.07             # Heliocentric distance (au)
+delta = 0.115         # Observer distance (au)
+lp = 0.0              # Production scale length (km)
 rez = 2               # Spectral resolution (channels)
-spec = "HCN"
+spec = "HCN"          # Molecule name (arbitrary)
 eta = 0.9             # Telescope flux loss factor
-hpbwx = 0.454
-hpbwy = 0.308
-pa = -65.5
-xne = 0.2
-collPartId = 1
+hpbwx = 0.454         # Beam major axis ('')
+hpbwy = 0.308         # Beam minor axis ('')
+pa = -65.5            # Angle of major axis (degrees)
+xne = 0.2             # Electron density scale factor
+collPartId = 1        # Important - see LAMDA file
 trans = 3             # zero indexed transition
-chwid = 50.           # m/s
-nchan = 100
-npix = 512
+chwid = 50.           # Spectral resolution of model (m/s)
+nchan = 100           # Numer of channels in the model
+npix = 512            # Image dimensions
 imgres = 0.1          # pixel size ('')
 units = 0             # 0 for Kelvin, 1 for Jy/pix
-lamFile = "hcn.dat"
-pumpFile = "g_HCN_1au.dat"
-obsSpec = 'HCN.clean1.contsub.259_266_K_kms_rest.txt'
+lamFile = "hcn.dat"   # LAMDA data file
+pumpFile = "g_HCN_1au.dat"  # Effective pumping rates
+obsSpec = 'HCN.clean1.contsub.259_266_K_kms_rest.txt'  # Observed spectrum (flux/T_B vs. km/s)
 showplots = True
 
-p0=[abund,tkin,vexp,vsource,dopplerb]
-pfix=[False,True,False,False,True]
-
+p0 = [abund,tkin,vexp,vsource,dopplerb]  # Optimizable Parameters
+pfix = [False,True,False,False,True]  # Parameters to hold fixed
