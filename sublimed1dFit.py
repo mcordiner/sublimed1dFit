@@ -8,7 +8,7 @@
 
 import os,sys
 import numpy as np
-from pymodules.mpfit import mpfit
+from mpfit import mpfit
 from scipy.interpolate import interp1d
 import pylab as plt
 from scipy.stats import chi2
@@ -37,7 +37,7 @@ def getChisq(p, fjac=None, functkw=None):
    abund,tkin,vexp,vsource,doppler = p
 
 #  Generate model image        
-   sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,doppler,npix,imgres,units,freqAx,modelFile)
+   sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,lp,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,doppler,npix,imgres,units,freqAx,modelFile)
    
    os.system("sublimed1dc %s" % (modelFile))
    mvel,mT=convImgSpec(fitsFile,hpbwx,hpbwy,pa,eta,units,xoff=0,yoff=0,freqAx=freqAx,drop=True,outfile=fitsFile[:-5]+"_conv_spec.txt",integrate=True)
@@ -119,11 +119,12 @@ def gauss2d(xlen,ylen,fwhm_x,fwhm_y,dx,theta=0.,x0=0.,y0=0.,norm=True):
 ####################################
 # Write the sublimed1dc input file #
 ####################################
-def sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,doppler,npix,imgres,units,freqAx,modelFile):
+def sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,lp,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,doppler,npix,imgres,units,freqAx,modelFile):
 
    vexp = vexp * 1000.   # To convert to SI as required by LIME
    doppler = doppler * 1000.   # To convert to SI as required by LIME
    vsource = vsource * 1000.   # To convert to SI as required by LIME
+   lp = lp * 1000. # To convert to SI as required by LIME
 
    # This change allows the model to be centered on an arbitrary frequency
    if freqAx:
@@ -138,14 +139,14 @@ runname		= SUBLIMED1DFIT_%s;			// Prefix for output files
 moldatfile	= %s;			// Molecular data file (LAMDA format)
 girdatfile	= %s;	// Effective solar pumping rates (at 1 AU)
 
-Qwater		= %f;  	//  H2O production rate from the nucleus (mol/s)
+Qwater		= %8.3e;  	//  H2O production rate from the nucleus (mol/s)
 vexp		   = %f;		//  Coma expansion velocity (m/s)
 deldot      = %f;    // Velocity shift (m/s)
 tkin		   = %f;		   //  Kinetic temperature (K)
-abund		   = %f;	   //  Parent molecular abundance
-dAbund      = 0;    //  Daughter molecular abundance
-lp          = 0;     // Production scale length 
-betamol		= %f;   //  Molecular photolysis rate at 1 AU (s^-1)
+abund		   = 0;	   //  Parent molecular abundance
+dAbund      = %12.6e;    //  Daughter molecular abundance
+lp          = %f;     // Production scale length 
+betamol		= %8.3e;   //  Molecular photolysis rate at 1 AU (s^-1)
 xne 		= %f;		// Electron density scaling factor - default value is 0.2
 rhelio	= %f;         //  Heliocentric distance (AU)
 rnuc     = %f;         //  Nucleus radius (m)
@@ -162,7 +163,7 @@ delta		= %f;   	//  Distance from observer (AU)
    """
 
    f=open(modelFile,'w')
-   f.write(limeInput %(spec,lamFile,pumpFile,Q,vexp,vsource,tkin,abund,betamol,xne,rH,rNuc,collPartId,units,chwid,nchan,npix,imgres,delta,fString))
+   f.write(limeInput %(spec,lamFile,pumpFile,Q,vexp,vsource,tkin,abund,lp,betamol,xne,rH,rNuc,collPartId,units,chwid,nchan,npix,imgres,delta,fString))
    f.close()
 
 
@@ -242,6 +243,9 @@ if 'rez' not in globals():
 
 if 'rmsFactor' not in globals():
    rmsFactor = 1.
+
+if 'lp' not in globals():
+   lp = 0.0
 
 xobs,yobs = np.loadtxt(obsSpec,unpack=1)
 
