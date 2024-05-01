@@ -34,10 +34,10 @@ def getChisq(p, fjac=None, functkw=None):
    print(p)
    
 #  Parameters for this run            
-   abund,tkin,vexp,vsource,doppler = p
+   abund,tkin,vexp,vsource,dopplerb = p
 
 #  Generate model image        
-   sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,lp,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,doppler,npix,imgres,units,freqAx,modelFile)
+   sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,lp,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,dopplerb,npix,imgres,units,freqAx,modelFile)
    
    os.system("sublimed1dc %s" % (modelFile))
    mvel,mT=convImgSpec(fitsFile,hpbwx,hpbwy,pa,eta,units,xoff=0,yoff=0,freqAx=freqAx,drop=True,outfile=fitsFile[:-5]+"_conv_spec.txt",integrate=True)
@@ -119,10 +119,10 @@ def gauss2d(xlen,ylen,fwhm_x,fwhm_y,dx,theta=0.,x0=0.,y0=0.,norm=True):
 ####################################
 # Write the sublimed1dc input file #
 ####################################
-def sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,lp,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,doppler,npix,imgres,units,freqAx,modelFile):
+def sublimed1dModel(Q,abund,tkin,vexp,rNuc,betamol,rH,delta,lp,spec,chwid,nchan,lamFile,pumpFile,trans,collPartId,xne,vsource,dopplerb,npix,imgres,units,freqAx,modelFile):
 
    vexp = vexp * 1000.   # To convert to SI as required by LIME
-   doppler = doppler * 1000.   # To convert to SI as required by LIME
+   dopplerb = dopplerb * 1000.   # To convert to SI as required by LIME
    vsource = vsource * 1000.   # To convert to SI as required by LIME
    lp = lp * 1000. # To convert to SI as required by LIME
 
@@ -146,6 +146,7 @@ tkin		   = %f;		   //  Kinetic temperature (K)
 abund		   = 0;	   //  Parent molecular abundance
 dAbund      = %12.6e;    //  Daughter molecular abundance
 lp          = %f;     // Production scale length 
+dopplerb	   = %f;		// Turbulent Doppler broadening parameter (m/s)
 betamol		= %8.3e;   //  Molecular photolysis rate at 1 AU (s^-1)
 xne 		= %f;		// Electron density scaling factor - default value is 0.2
 rhelio	= %f;         //  Heliocentric distance (AU)
@@ -163,7 +164,7 @@ delta		= %f;   	//  Distance from observer (AU)
    """
 
    f=open(modelFile,'w')
-   f.write(limeInput %(spec,lamFile,pumpFile,Q,vexp,vsource,tkin,abund,lp,betamol,xne,rH,rNuc,collPartId,units,chwid,nchan,npix,imgres,delta,fString))
+   f.write(limeInput %(spec,lamFile,pumpFile,Q,vexp,vsource,tkin,abund,lp,dopplerb,betamol,xne,rH,rNuc,collPartId,units,chwid,nchan,npix,imgres,delta,fString))
    f.close()
 
 

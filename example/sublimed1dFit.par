@@ -3,12 +3,11 @@ abund = 0.001
 tkin = 80.
 vexp = 0.70
 vsource = -0.5
-doppler = 0.0
+dopplerb = 0.0
 
 # Fixed parameters
 Q = 7e27
 rNuc = 500.           # m
-betamain = 1.21e-5    # photo-rate at 1AU of main collision partner
 betamol = 1.54e-5    # photo-rate at 1AU of observed species
 rH = 1.07
 delta = 0.115
@@ -32,6 +31,6 @@ pumpFile = "g_HCN_1au.dat"
 obsSpec = 'HCN.clean1.contsub.259_266_K_kms_rest.txt'
 showplots = True
 
-p0=[abund,tkin,vexp,vsource,doppler]
+p0=[abund,tkin,vexp,vsource,dopplerb]
 pfix=[False,True,False,False,True]
 
