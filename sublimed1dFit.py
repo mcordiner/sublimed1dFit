@@ -14,7 +14,7 @@ import pylab as plt
 from scipy.stats import chi2
 from astropy.convolution import convolve, Gaussian1DKernel
 
-if len(sys.argv) != 2: sys.exit("Usage: sublimed1dFit.py sublimed1dFit.par \n Observed spectrum must be in units of K vs. km/s")
+if len(sys.argv) != 2: sys.exit("Usage: sublimed1dFit.py sublimed1dFit.par \n Observed spectrum must be on a velocity scale (km/s)")
 
 c = 2.99792458e8
 
@@ -87,6 +87,7 @@ def write2col(data1,data2,outfile):
     for i in range(len(data1)):
         f.write("%12.8f  %14.7e\n" %(data1[i], data2[i]))
     f.close()
+
 
 ###############
 # 2D Gaussian #
@@ -171,7 +172,6 @@ delta		= %f;   	//  Distance from observer (AU)
 #######################################################################################
 # Multiply fits cube by Gaussian beam and extract the summed (beam-weighted) spectrum #
 #######################################################################################
-
 def convImgSpec(infits,hpbwx,hpbwy,theta,eta,units,xoff=0,yoff=0,freqAx=False,drop=True,outfile=None,integrate=False):
    # 1D Spectrum is extracted from a 3D image cube after applying a Gaussian beam shape (hpbwx,hpbwy are the major and minor axes in arcsec, theta is the position angle in degrees (CCW from the x axis), and xoff,yoff are the beam offset positions in arcsec). If drop=True, then only the first stokes axis of the cube is used. This (multiplicative) algorithm is much faster than a full convolution, but only applies for images in flux/pixel units. If the image units were Kelvin (surface brightness), we normalize the Gaussian so that the beam sum becomes an average.
    from scipy.constants import c
@@ -227,7 +227,6 @@ def convImgSpec(infits,hpbwx,hpbwy,theta,eta,units,xoff=0,yoff=0,freqAx=False,dr
 ###################################################################
 #  MAIN PROGRAM                                                   #
 ###################################################################
-
 # Load input parameters
 exec(compile(open(sys.argv[1], "rb").read(), sys.argv[1], 'exec'))
 
